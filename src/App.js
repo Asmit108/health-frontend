@@ -1,25 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import Dashboard from './Components/Dashboard';
+import Login from './Components/Login';
+import Register from './Components/Register';
+import { useEffect, useState } from 'react';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const [path, setPath] = useState(window.location.pathname);
+
+  useEffect(() => {
+    const handlePopState = () => setPath(window.location.pathname);
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  if (path === '/register' || path === '/') return <Register />;
+  if (path === '/dashboard') return <Dashboard />;
+  return <Login />;
 }
 
 export default App;

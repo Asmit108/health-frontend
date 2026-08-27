@@ -3,9 +3,9 @@ import {
     DELETE_PATIENT_FAILURE,
     DELETE_PATIENT_REQUEST,
     DELETE_PATIENT_SUCCESS,
-    GET_PATIENT_PROFILEBY_ID_FAILURE,
-    GET_PATIENT_PROFILEBY_ID_REQUEST,
-    GET_PATIENT_PROFILEBY_ID_SUCCESS,
+    GET_PATIENT_PROFILE_BY_ID_FAILURE,
+    GET_PATIENT_PROFILE_BY_ID_REQUEST,
+    GET_PATIENT_PROFILE_BY_ID_SUCCESS,
     GET_PATIENT_PROFILE_FAILURE,
     GET_PATIENT_PROFILE_REQUEST,
     GET_PATIENT_PROFILE_SUCCESS,
@@ -14,9 +14,9 @@ import {
     UPDATE_PATIENT_PROFILE_SUCCESS
 } from "./ActionType";
 
-const getPatientProfileByIdRequest = () => ({ type: GET_PATIENT_PROFILEBY_ID_REQUEST })
-const getPatientProfileByIdSuccess = (profile) => ({ type: GET_PATIENT_PROFILEBY_ID_SUCCESS, payload: profile })
-const getPatientProfileByIdFailure = (error) => ({ type: GET_PATIENT_PROFILEBY_ID_FAILURE, payload: error })
+const getPatientProfileByIdRequest = () => ({ type: GET_PATIENT_PROFILE_BY_ID_REQUEST })
+const getPatientProfileByIdSuccess = (profile) => ({ type: GET_PATIENT_PROFILE_BY_ID_SUCCESS, payload: profile })
+const getPatientProfileByIdFailure = (error) => ({ type: GET_PATIENT_PROFILE_BY_ID_FAILURE, payload: error })
 
 export const getPatientProfileById = (id) => async (dispatch) => {
     dispatch(getPatientProfileByIdRequest())
