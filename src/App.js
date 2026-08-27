@@ -1,20 +1,17 @@
 import Dashboard from './Components/Dashboard';
 import Login from './Components/Login';
 import Register from './Components/Register';
-import { useEffect, useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
 
 function App() {
-  const [path, setPath] = useState(window.location.pathname);
-
-  useEffect(() => {
-    const handlePopState = () => setPath(window.location.pathname);
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
-  }, []);
-
-  if (path === '/register' || path === '/') return <Register />;
-  if (path === '/dashboard') return <Dashboard />;
-  return <Login />;
+  return (
+    <div className="">
+      <Routes>
+         <Route path='/' element={<Register/>}></Route>
+         <Route path='/register' element={<Register/>}></Route>
+         <Route path='/login' element={<Login/>}></Route>
+         <Route path='/dashboard' element={<Dashboard/>}></Route>
+      </Routes>
+    </div>
+  );
 }
-
-export default App;

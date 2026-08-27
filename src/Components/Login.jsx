@@ -2,12 +2,14 @@ import { useState } from 'react';
 import './Auth.css';
 import { login } from '../State/Auth/Action';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleChange = (event) => setFormData({ ...formData, [event.target.name]: event.target.value });
 
@@ -20,6 +22,7 @@ const Login = () => {
         password: formData.password
     }
     dispatch(login(userData));
+    navigate('/dashboard');
   };
 
   return (

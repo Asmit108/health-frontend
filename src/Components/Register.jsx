@@ -2,12 +2,15 @@ import { useState } from 'react';
 import './Auth.css';
 import { register } from '../State/Auth/Action';
 import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
   const [formData, setFormData] = useState({ firstName: '', lastName: '', email: '', password: '', role: 'patient' });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
 
   const handleChange = (event) => setFormData({ ...formData, [event.target.name]: event.target.value });
 
@@ -23,6 +26,7 @@ const Register = () => {
         role: formData.role
     }
     dispatch(register(userData));
+    navigate('/dashboard');
   };
 
   return (
