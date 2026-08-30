@@ -3,6 +3,8 @@ import './Auth.css';
 import { register } from '../State/Auth/Action';
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
+import { getPatientProfile } from '../State/Patient/Action';
+import { getDoctorProfile } from '../State/Doctor/Action';
 
 const Register = () => {
   const [formData, setFormData] = useState({ firstName: '', lastName: '', email: '', password: '', role: 'patient' });
@@ -14,7 +16,7 @@ const Register = () => {
 
   const handleChange = (event) => setFormData({ ...formData, [event.target.name]: event.target.value });
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async(event) => {
     event.preventDefault();
     setError('');
     setIsLoading(true);
@@ -25,7 +27,13 @@ const Register = () => {
         password: formData.password,
         role: formData.role
     }
-    dispatch(register(userData));
+    const result = await dispatch(register(userData));
+    if(result.data.role == 'DOCTOR') {
+      await dispatch(getDoctorProfile());
+    }
+    else{
+      await dispatch(getPatientProfile());
+    }
     navigate('/dashboard');
   };
 

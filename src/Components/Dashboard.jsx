@@ -1,20 +1,89 @@
 import './Dashboard.css';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { deleteDoctor } from '../State/Doctor/Action';
+import { deletePatient } from '../State/Patient/Action';
+import { logout } from '../State/Auth/Action';
 
-function Dashboard({ onProfile }) {
-  const role = localStorage.getItem('role') || 'patient';
+const Dashboard = () => {
+  const role = (localStorage.getItem('role') || 'PATIENT').toUpperCase();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleProfile = () => {
+    navigate('/profile');
+  };
+
+  const handleDeleteProfile = async () => {
+    try {
+      if (role === 'DOCTOR') {
+        await dispatch(deleteDoctor());
+      } else {
+        await dispatch(deletePatient());
+      }
+      const result = await dispatch(logout());
+      if (result?.success) {
+        navigate('/login');
+      }
+    } catch (error) {
+      console.error('Delete profile failed:', error);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      const result = await dispatch(logout());
+      if (result?.success) {
+        navigate('/login');
+      }
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
+  const handleAppointment = () => {
+    console.log('Navigating to appointment page');
+    navigate('/create-appointment');
+  };
+
+  const handleShowAppointments = () => {
+    console.log('Showing all appointment list');
+    navigate('/appointments');
+  };
 
   return (
     <main className="dashboard-page">
       <header className="dashboard-header">
-        <a className="dashboard-brand" href="/dashboard">Careline<span>+</span></a>
-        <nav aria-label="Main navigation"><a className="nav-active" href="/dashboard">Overview</a><a href="/dashboard">Appointments</a><a href="/dashboard">Messages</a></nav>
-        <button className="profile-button" type="button" onClick={onProfile}><span className="profile-avatar">{role.charAt(0).toUpperCase()}</span> View my profile</button>
+        <span className="profile-avatar">{role}</span>
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+          <button className="profile-button" type="button" onClick={handleProfile}>View my profile</button>
+          <button className="profile-button" type="button" onClick={handleDeleteProfile} style={{ background: '#b11d1d' }}>
+            Delete profile
+          </button>
+          <button className="profile-button" type="button" onClick={handleLogout}>
+            Logout
+          </button>
+        </div>
       </header>
       <section className="dashboard-body">
         <p className="dashboard-eyebrow">Your health space</p>
         <h1>Good to see you.</h1>
         <p className="dashboard-subtitle">Keep track of your care and stay connected with your health team.</p>
-        <div className="dashboard-grid"><article><span className="card-label">Next appointment</span><strong>No upcoming appointments</strong><a href="/dashboard">Book an appointment <span>→</span></a></article><article><span className="card-label">Your care team</span><strong>Stay connected</strong><p>Your doctors and care updates will appear here.</p></article></div>
+        <div className="dashboard-grid">
+          <article>
+            <span className="card-label">Appointments</span>
+            <strong>No upcoming appointments</strong>
+            <div className="appointment-actions">
+              <button type="button" className="text-link-button" onClick={handleAppointment}>Book an appointment <span>→</span></button>
+              <button type="button" className="text-link-button" onClick={handleShowAppointments}>Show all appointments <span>→</span></button>
+            </div>
+          </article>
+          <article>
+            <span className="card-label">Your care team</span>
+            <strong>Stay connected</strong>
+            <p>Your doctors and care updates will appear here.</p>
+          </article>
+        </div>
       </section>
     </main>
   );

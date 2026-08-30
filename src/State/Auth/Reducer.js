@@ -22,7 +22,7 @@ export const authReducer=(state=initialState,action)=>{
             return {...state,isLoading:false,error:action.payload}  
         
         case LOGOUT:
-            return {...state,jwt:null,role:null}
+            return initialState;
         default:
            return state; 
      }

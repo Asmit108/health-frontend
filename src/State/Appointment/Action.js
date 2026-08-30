@@ -29,8 +29,11 @@ export const createAppointment = (appointmentData) => async (dispatch) => {
     try {
         const response = await api.post(`${API_BASE_URL}appointments`, appointmentData);
         dispatch(createAppointmentSuccess(response.data));
+        return { success: true, data: response.data };
     } catch (error) {
-        dispatch(createAppointmentFailure(error.message));
+        const message = error.response?.data?.message || error.message || 'Failed to create appointment';
+        dispatch(createAppointmentFailure(message));
+        return { success: false, error: message };
     }
 };
 

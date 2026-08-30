@@ -35,7 +35,10 @@ const getPatientProfileFailure = (error) => ({ type: GET_PATIENT_PROFILE_FAILURE
 export const getPatientProfile = () => async (dispatch) => {
     dispatch(getPatientProfileRequest())
     try {
+        console.log`Fetching patient profile...`; // Debugging log
+        console.log('api.headers:', api.request); // Debugging log
         const response = await api.get(`${API_BASE_URL}patients/profile`)
+        console.log('Patient profile response:', response.data); // Debugging log
         dispatch(getPatientProfileSuccess(response.data))
     } catch (error) {
         dispatch(getPatientProfileFailure(error.message))

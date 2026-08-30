@@ -33,7 +33,7 @@ export const patientReducer=(state=initialState,action)=>{
             return {...state,isLoading:false,error:null,patient:action.payload}
 
         case DELETE_PATIENT_SUCCESS:
-            return {...state,isLoading:false,error:null,patient:null}
+            return initialState;
 
         case GET_PATIENT_PROFILE_BY_ID_FAILURE:
         case GET_PATIENT_PROFILE_FAILURE:

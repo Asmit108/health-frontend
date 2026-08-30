@@ -1,3 +1,4 @@
+import { LOGOUT } from "../Auth/ActionType";
 import {
     CHECK_SYMPTOMS_FAILURE,
     CHECK_SYMPTOMS_REQUEST,
@@ -20,6 +21,9 @@ export const symptomReducer = (state = initialState, action) => {
 
         case CHECK_SYMPTOMS_FAILURE:
             return { ...state, isLoading: false, error: action.payload };
+
+        case LOGOUT:
+            return initialState;
 
         default:
             return state;

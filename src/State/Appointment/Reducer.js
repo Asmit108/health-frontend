@@ -1,3 +1,4 @@
+import { LOGOUT } from "../Auth/ActionType";
 import {
     CREATE_APPOINTMENT_FAILURE,
     CREATE_APPOINTMENT_REQUEST,
@@ -49,6 +50,9 @@ export const appointmentReducer = (state = initialState, action) => {
         case GET_APPOINTMENTS_BY_DOCTOR_SUCCESS:
         case GET_APPOINTMENTS_BY_PATIENT_SUCCESS:
             return { ...state, isLoading: false, error: null, appointments: action.payload };
+
+        case LOGOUT:
+            return initialState;
 
         case CREATE_APPOINTMENT_FAILURE:
         case UPDATE_APPOINTMENT_STATUS_FAILURE:

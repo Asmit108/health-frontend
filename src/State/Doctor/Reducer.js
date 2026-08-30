@@ -41,7 +41,7 @@ export const doctorReducer = (state = initialState, action) => {
             return { ...state, isLoading: false, error: null, doctor: action.payload };
 
         case DELETE_DOCTOR_SUCCESS:
-            return { ...state, isLoading: false, error: null, doctor: null };
+            return initialState;
 
         case GET_DOCTOR_PROFILE_FAILURE:
         case GET_DOCTOR_PROFILES_FAILURE:

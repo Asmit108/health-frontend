@@ -11,18 +11,21 @@ export const register = (userData) => async (dispatch) => {
     dispatch(registerRequest())
 
     try {
-        const response = await api.post(`${API_BASE_URL}/api/auth/signup`, userData)
+        const response = await api.post(`${API_BASE_URL}auth/signup`, userData)
         console.log(response);
-        const jwt = response.data.jwt;
+        const jwt = response.data.token;
         const role = response.data.role;
         if (jwt && role) {
             localStorage.setItem("jwt", jwt)
             localStorage.setItem("role", role)
         }
 
-        dispatch(registerSuccess(jwt, role))
+        dispatch(registerSuccess(jwt, role));
+        return { success: true, data: response.data }
     } catch (error) {
-        dispatch(registerFailure(error.message))
+        const message = error.response?.data?.message || error.message || 'Login failed';
+        dispatch(registerFailure(error.message));
+        return { success: false, error: message }
     }
 }
 
@@ -34,21 +37,34 @@ export const login = (userData) => async (dispatch) => {
     console.log("login");
     dispatch(loginRequest())
     try {
-        const response = await api.post(`${API_BASE_URL}/api/auth/signin`, userData)
-        const jwt = response.data.jwt;
+        const response = await api.post(`${API_BASE_URL}auth/signin`, userData)
+        const jwt = response.data.token;
         const role = response.data.role;
         if (jwt && role) {
+            console.log("Storing JWT and role in localStorage:", jwt, role);
             localStorage.setItem("jwt", jwt)
             localStorage.setItem("role", role)
         }
-        console.log(jwt)
         dispatch(loginSuccess(jwt, role))
+        return { success: true, data: response.data }
     } catch (error) {
-        dispatch(loginFailure(error.message))
+        const message = error.response?.data?.message || error.message || 'Login failed';
+        dispatch(loginFailure(message))
+        return { success: false, error: message }
     }
 }
 
 export const logout = () => async (dispatch) => {
-    dispatch({ type: LOGOUT, payload: null });
-    localStorage.clear();
+    try {
+        dispatch({ type: LOGOUT, payload: null });
+        localStorage.clear();
+        return { success: true };
+    } catch (error) {
+        dispatch({ type: LOGOUT, payload: null });
+        localStorage.clear();
+        return {
+            success: false,
+            error: error.response?.data?.message || error.message || 'Logout failed'
+        };
+    }
 }

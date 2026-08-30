@@ -12,9 +12,9 @@ import {
     GET_DOCTOR_PROFILES_FAILURE,
     GET_DOCTOR_PROFILES_REQUEST,
     GET_DOCTOR_PROFILES_SUCCESS,
-    UPDATE_DOCTOR_FAILURE,
-    UPDATE_DOCTOR_REQUEST,
-    UPDATE_DOCTOR_SUCCESS
+    UPDATE_DOCTOR_PROFILE_FAILURE,
+    UPDATE_DOCTOR_PROFILE_REQUEST,
+    UPDATE_DOCTOR_PROFILE_SUCCESS
 } from "./ActionType";
 
 const getDoctorProfilesRequest = () => ({ type: GET_DOCTOR_PROFILES_REQUEST });
@@ -38,7 +38,9 @@ const getDoctorProfileFailure = (error) => ({ type: GET_DOCTOR_PROFILE_FAILURE, 
 export const getDoctorProfile = () => async (dispatch) => {
     dispatch(getDoctorProfileRequest());
     try {
+        console.log('Fetching doctor profile...'); // Debugging log
         const response = await api.get(`${API_BASE_URL}doctors/profile`);
+        console.log('Doctor profile response:', response.data); // Debugging log
         dispatch(getDoctorProfileSuccess(response.data));
     } catch (error) {
         dispatch(getDoctorProfileFailure(error.message));

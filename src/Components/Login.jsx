@@ -1,28 +1,44 @@
 import { useState } from 'react';
 import './Auth.css';
 import { login } from '../State/Auth/Action';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { getDoctorProfile } from '../State/Doctor/Action';
+import { getPatientProfile } from '../State/Patient/Action';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const authState = useSelector((state) => state.auth);
+  const error = authState.error;
+  const isLoading = authState.isLoading;
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleChange = (event) => setFormData({ ...formData, [event.target.name]: event.target.value });
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    setError('');
-    setIsLoading(true);
-    const userData = {
-        email: formData.email,
-        password: formData.password
+    if (formData.email === '' || formData.password === '') {
+      return;
     }
-    dispatch(login(userData));
-    navigate('/dashboard');
+
+    const userData = {
+      email: formData.email,
+      password: formData.password
+    };
+
+    const result = await dispatch(login(userData));
+
+    if (result?.success) {
+      if(result.data.role == 'DOCTOR') {
+        await dispatch(getDoctorProfile());
+      }
+      else{
+        await dispatch(getPatientProfile());
+      }
+      navigate('/dashboard');
+      return;
+    }
   };
 
   return (
@@ -44,9 +60,8 @@ const Login = () => {
           <input id="login-email" name="email" type="email" value={formData.email} onChange={handleChange} placeholder="you@example.com" autoComplete="email" required />
           <label htmlFor="login-password">Password</label>
           <input id="login-password" name="password" type="password" value={formData.password} onChange={handleChange} placeholder="Enter your password" autoComplete="current-password" required />
-          <div className="form-options"><label className="checkbox-label"><input type="checkbox" /> Remember me</label><button className="text-button" type="button">Forgot password?</button></div>
-          {error && <p className="form-error" role="alert">{error}</p>}
-          <button className="primary-button" type="submit" disabled={isLoading}>{isLoading ? 'Signing in...' : 'Log in'} <span aria-hidden="true">→</span></button>
+          {error != null && <p className="form-error" role="alert">{error}</p>}
+          <button className="primary-button" type="submit" disabled={isLoading}>{isLoading == true ? 'Signing in...' : 'Log in'} <span aria-hidden="true">→</span></button>
         </form>
         <p className="switch-prompt">New to Careline? <a className="switch-button" href="/register">Register</a></p>
       </section>
