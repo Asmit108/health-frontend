@@ -1,5 +1,7 @@
-health-frontend-app:
-  build: .
-  container_name: health-frontend-app
-  ports:
-    - "3000:3000"
+services:
+  health-frontend-app:
+    build: .
+    container_name: health-frontend-app
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
