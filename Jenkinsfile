@@ -16,15 +16,21 @@ pipeline {
                 bat 'npm run build'
             }
         }
-        stage('Create docker image') {
-            steps {
-                bat 'docker build -t health-frontend .'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                bat 'docker run -p 3000:3000 health-frontend'
-            }
+        stage('Deploy Frontend') {
+    steps {
+        withCredentials([
+            sshUserPrivateKey(
+                credentialsId: 'ec2-ssh-key',
+                keyFileVariable: 'SSH_KEY',
+                usernameVariable: 'SSH_USER'
+            )
+        ]) {
+
+            bat '''
+                scp -i "%SSH_KEY%" -o StrictHostKeyChecking=no -r build ubuntu@13.204.66.133:~/health-frontend/
+
+                ssh -i "%SSH_KEY%" -o StrictHostKeyChecking=no ubuntu@13.204.66.133 "cd ~/health-frontend && git pull && docker compose down && docker compose up -d --build"
+            '''
         }
     }
 }
