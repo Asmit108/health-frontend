@@ -95,22 +95,26 @@ const Dashboard = () => {
             <p>Your doctors and care updates will appear here.</p>
           </article>
           {role === 'PATIENT' && (
-          <article>
-            <span className="card-label">Health assistant</span>
+          <article className="symptom-card">
+            <span className="card-label">HEALTH ASSISTANT</span>
 
-            <strong>Check your symptoms</strong>
+            <h2>Check your symptoms</h2>
 
-            <p>Enter your symptoms below.</p>
+            <p className="symptom-description">
+              Describe how you are feeling and get a preliminary health assessment.
+            </p>
 
             <textarea
-              placeholder="Enter your symptoms..."
-              rows="5"
+              className="symptom-input"
+              value={symptoms}
               onChange={(e) => setSymptoms(e.target.value)}
+              placeholder="Describe your symptoms here..."
+              rows={6}
             />
 
             <button
               type="button"
-              className="text-link-button"
+              className="check-symptoms-button"
               onClick={() => handleCheckSymptoms(symptoms)}
               disabled={symptomState.isLoading}
             >
@@ -119,24 +123,69 @@ const Dashboard = () => {
             </button>
 
             {symptomState.error && (
-              <p>{symptomState.error}</p>
+              <div className="symptom-error">
+                {symptomState.error}
+              </div>
             )}
 
             {symptomState.symptomResponse && (
-              <div className="symptom-response">
-                <h3>Result</h3>
+              <div className="symptom-result">
+                <div className="result-header">
+                  <span className="result-label">ASSESSMENT RESULT</span>
+                </div>
 
-                <pre>
-                  {JSON.stringify(
-                    symptomState.symptomResponse,
-                    null,
-                    2
-                  )}
-                </pre>
+                <div className="result-section">
+                  <h3>Possible causes</h3>
+                  <p>
+                    {symptomState.symptomResponse.possibleCauses}
+                  </p>
+                </div>
+
+                <div className="result-section">
+                  <h3>Severity</h3>
+                  <p>
+                    {symptomState.symptomResponse.severity}
+                  </p>
+                </div>
+
+                <div className="result-section">
+                  <h3>Recommended remedies</h3>
+                  <p>
+                    {symptomState.symptomResponse.remedies}
+                  </p>
+                </div>
+
+                <div className="result-section">
+                  <h3>When to seek care</h3>
+                  <p>
+                    {symptomState.symptomResponse.whenToSeekCare}
+                  </p>
+                </div>
+
+                <div className="result-section">
+                  <h3>Recommended tests</h3>
+                  <p>
+                    {symptomState.symptomResponse.recommendedTests}
+                  </p>
+                </div>
+
+                <div className="result-section">
+                  <h3>Lifestyle tips</h3>
+                  <p>
+                    {symptomState.symptomResponse.lifestyleTips}
+                  </p>
+                </div>
+
+                <div className="doctor-recommendation">
+                  <span>Recommended doctor</span>
+                  <strong>
+                    {symptomState.symptomResponse.typeOfDoctorToSeek}
+                  </strong>
+                </div>
               </div>
             )}
           </article>
-          )}
+        )}
         </div>
       </section>
     </main>
