@@ -1,14 +1,18 @@
 import './Dashboard.css';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { deleteDoctor } from '../State/Doctor/Action';
 import { deletePatient } from '../State/Patient/Action';
 import { logout } from '../State/Auth/Action';
+import { checkSymptoms } from '../State/Symptom/Action';
+import { useState } from 'react';
 
 const Dashboard = () => {
   const role = (localStorage.getItem('role') || 'PATIENT').toUpperCase();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const symptomState = useSelector((state) => state.symptom);
+  const [symptoms, setSymptoms] = useState('');
 
   const handleProfile = () => {
     navigate('/profile');
@@ -51,6 +55,13 @@ const Dashboard = () => {
     navigate('/appointments');
   };
 
+  const handleCheckSymptoms = (symptoms) => {
+    if (!symptoms.trim()) {
+      return;
+    }
+    dispatch(checkSymptoms(symptoms.trim()));
+  };
+
   return (
     <main className="dashboard-page">
       <header className="dashboard-header">
@@ -83,6 +94,49 @@ const Dashboard = () => {
             <strong>Stay connected</strong>
             <p>Your doctors and care updates will appear here.</p>
           </article>
+          {role === 'PATIENT' && (
+          <article>
+            <span className="card-label">Health assistant</span>
+
+            <strong>Check your symptoms</strong>
+
+            <p>Enter your symptoms below.</p>
+
+            <textarea
+              placeholder="Enter your symptoms..."
+              rows="5"
+              onChange={(e) => setSymptoms(e.target.value)}
+            />
+
+            <button
+              type="button"
+              className="text-link-button"
+              onClick={() => handleCheckSymptoms(symptoms)}
+              disabled={symptomState.isLoading}
+            >
+              {symptomState.isLoading ? 'Checking...' : 'Check symptoms'}
+              <span>→</span>
+            </button>
+
+            {symptomState.error && (
+              <p>{symptomState.error}</p>
+            )}
+
+            {symptomState.symptomResponse && (
+              <div className="symptom-response">
+                <h3>Result</h3>
+
+                <pre>
+                  {JSON.stringify(
+                    symptomState.symptomResponse,
+                    null,
+                    2
+                  )}
+                </pre>
+              </div>
+            )}
+          </article>
+          )}
         </div>
       </section>
     </main>
