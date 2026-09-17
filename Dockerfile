@@ -2,10 +2,10 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-RUN npm install -g serve
-
 COPY build ./build
+
+COPY server.js ./server.js
 
 EXPOSE 3000
 
-CMD ["serve", "-s", "build", "-l", "3000"]
+CMD ["node", "server.js"]

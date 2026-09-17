@@ -1,8 +1,6 @@
-import axios from "axios";
 import { API_BASE_URL, api } from "../../config/apiConfig";
 import {LOGIN_FAILURE, LOGIN_REQUEST, LOGIN_SUCCESS, LOGOUT, REGISTER_FAILURE, REGISTER_REQUEST, REGISTER_SUCCESS } from "./ActionType";
 
-const token = localStorage.getItem("jwt");
 const registerRequest = () => ({ type: REGISTER_REQUEST })
 const registerSuccess = (jwt, role) => ({ type: REGISTER_SUCCESS, payload: { jwt, role } })
 const registerFailure = (error) => ({ type: REGISTER_FAILURE, payload: error })
@@ -23,9 +21,8 @@ export const register = (userData) => async (dispatch) => {
         dispatch(registerSuccess(jwt, role));
         return { success: true, data: response.data }
     } catch (error) {
-        const message = error.response?.data?.message || error.message || 'Login failed';
         dispatch(registerFailure(error.message));
-        return { success: false, error: message }
+        return { success: false, error: error.message }
     }
 }
 
@@ -48,9 +45,8 @@ export const login = (userData) => async (dispatch) => {
         dispatch(loginSuccess(jwt, role))
         return { success: true, data: response.data }
     } catch (error) {
-        const message = error.response?.data?.message || error.message || 'Login failed';
-        dispatch(loginFailure(message))
-        return { success: false, error: message }
+        dispatch(loginFailure(error.message))
+        return { success: false, error: error.message }
     }
 }
 
@@ -64,7 +60,7 @@ export const logout = () => async (dispatch) => {
         localStorage.clear();
         return {
             success: false,
-            error: error.response?.data?.message || error.message || 'Logout failed'
+            error: error.message
         };
     }
 }
