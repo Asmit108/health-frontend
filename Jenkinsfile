@@ -30,11 +30,11 @@ pipeline {
                     string(
                         credentialsId: 'keystore-password',
                         variable: 'SPRING_SSL_KEY_STORE_PASSWORD'
-                    ),
+                    )
                 ]) {
                     writeFile file: '.env', text: """
                     SPRING_SSL_KEY_STORE_PASSWORD=${SPRING_SSL_KEY_STORE_PASSWORD}
-                    SPRING_SSL_KEY_STORE_FILE=/ssl/keystore.p12
+                    SPRING_SSL_KEY_STORE_FILE=./ssl/keystore.p12
                     """
                     bat '''
                         scp -i "%SSH_KEY%" -o StrictHostKeyChecking=no -r build ubuntu@13.204.66.133:~/health-frontend/
