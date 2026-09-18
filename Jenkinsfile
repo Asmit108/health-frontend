@@ -25,7 +25,7 @@ pipeline {
                     ),
                     file(
                         credentialsId: 'KeyStore',
-                        variable: 'KEYSTORE_FILE'
+                        variable: 'SPRING_SSL_KEY_STORE_FILE'
                     ),
                     string(
                         credentialsId: 'keystore-password',

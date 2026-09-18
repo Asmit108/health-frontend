@@ -4,4 +4,6 @@ services:
     container_name: health-frontend-app
     ports:
       - "3000:3000"
+    env_file:
+      - .env
     restart: unless-stopped
