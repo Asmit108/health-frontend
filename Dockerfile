@@ -6,6 +6,8 @@ COPY build ./build
 
 RUN npm install express
 
+COPY ssl ./ssl
+
 COPY server.js ./server.js
 
 EXPOSE 3000
