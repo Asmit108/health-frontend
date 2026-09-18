@@ -4,6 +4,8 @@ WORKDIR /app
 
 COPY build ./build
 
+RUN npm install express
+
 COPY server.js ./server.js
 
 EXPOSE 3000
