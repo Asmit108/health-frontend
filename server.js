@@ -14,8 +14,8 @@ app.get('/*splat', (req, res) => {
 });
 
 const httpsOptions = {
-  pfx: fs.readFileSync(process.env.SSL_KEYSTORE_FILE),
-  passphrase: process.env.SSL_KEYSTORE_PASSWORD,
+  pfx: fs.readFileSync(process.env.SPRING_SSL_KEY_STORE_FILE),
+  passphrase: process.env.SPRING_SSL_KEY_STORE_PASSWORD,
 };
 
 https.createServer(httpsOptions, app).listen(PORT, '0.0.0.0', () => {
