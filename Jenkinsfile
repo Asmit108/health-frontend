@@ -37,15 +37,15 @@ pipeline {
                     SPRING_SSL_KEY_STORE_FILE=./ssl/keystore.p12
                     """
                     bat '''
-                        scp -i "%SSH_KEY%" -o StrictHostKeyChecking=no -r build ubuntu@13.204.66.133:~/health-frontend/
+                        scp -i "%SSH_KEY%" -o StrictHostKeyChecking=no -r build ubuntu@13.127.245.42:~/health-frontend/
 
-                        scp -i "%SSH_KEY%" -o StrictHostKeyChecking=no .env ubuntu@13.204.66.133:~/health-frontend/.env
+                        scp -i "%SSH_KEY%" -o StrictHostKeyChecking=no .env ubuntu@13.127.245.42:~/health-frontend/.env
 
-                        ssh -i "%SSH_KEY%" -o StrictHostKeyChecking=no ubuntu@13.204.66.133 "mkdir -p ~/health-frontend/ssl"
+                        ssh -i "%SSH_KEY%" -o StrictHostKeyChecking=no ubuntu@13.127.245.42 "mkdir -p ~/health-frontend/ssl"
 
-                        scp -i "%SSH_KEY%" -o StrictHostKeyChecking=no "%SPRING_SSL_KEY_STORE_FILE%" ubuntu@13.204.66.133:~/health-frontend/ssl/keystore.p12
+                        scp -i "%SSH_KEY%" -o StrictHostKeyChecking=no "%SPRING_SSL_KEY_STORE_FILE%" ubuntu@13.127.245.42:~/health-frontend/ssl/keystore.p12
 
-                        ssh -i "%SSH_KEY%" -o StrictHostKeyChecking=no ubuntu@13.204.66.133 "cd ~/health-frontend && git pull && docker compose down && docker compose up -d --build"
+                        ssh -i "%SSH_KEY%" -o StrictHostKeyChecking=no ubuntu@13.127.245.42 "cd ~/health-frontend && git pull && docker compose down && docker compose up -d --build"
                     '''
                 }
             }
