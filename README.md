@@ -64,5 +64,4 @@ npm run build
 The production build is generated in the `build` directory for a standard Create React App project.
 
 ## Backend API Documentation
-
-http://localhost:3000
+[FRONTEND PRODUCTION URL](https://13.233.194.9:3000)
